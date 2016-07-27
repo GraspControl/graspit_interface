@@ -358,6 +358,11 @@ bool GraspitInterface::setRobotDesiredDOFCB(graspit_interface::SetRobotDesiredDO
     else{
         if(graspitCore->getWorld()->dynamicsAreOn())
         {
+            for(int i=0; i < graspitCore->getWorld()->getHand(request.id)->getNumDOF(); i++)
+            {
+                graspitCore->getWorld()->getHand(request.id)->getDOF(i)->setDesiredVelocity(request.dof_velocities.data()[i]);
+            }
+
             graspitCore->getWorld()->getHand(request.id)->setDesiredDOFVals(request.dofs.data());
         }
         else
