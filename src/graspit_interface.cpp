@@ -34,6 +34,7 @@ int GraspitInterface::init(int argc, char** argv)
     setGraspableBodyPose_srv = nh->advertiseService("setGraspableBodyPose", &GraspitInterface::setGraspableBodyPoseCB, this);
     getDynamics_srv = nh->advertiseService("getDynamics", &GraspitInterface::getDynamicsCB, this);
     setDynamics_srv = nh->advertiseService("setDynamics", &GraspitInterface::setDynamicsCB, this);
+    stepDynamics_srv = nh->advertiseService("stepDynamics", &GraspitInterface::stepDynamicsCB, this);
     autoGrasp_srv = nh->advertiseService("autoGrasp", &GraspitInterface::autoGraspCB, this);
     autoOpen_srv = nh->advertiseService("autoOpen", &GraspitInterface::autoOpenCB, this);
     setRobotDesiredDOF_srv = nh->advertiseService("setRobotDesiredDOF", &GraspitInterface::setRobotDesiredDOFCB, this);
@@ -309,6 +310,15 @@ bool GraspitInterface::setDynamicsCB(graspit_interface::SetDynamics::Request &re
         graspitCore->getWorld()->turnOffDynamics();
         ROS_INFO("Turning Dynamics Off");
     }
+    return true;
+}
+
+bool GraspitInterface::stepDynamicsCB(graspit_interface::StepDynamics::Request &request,
+                                      graspit_interface::StepDynamics::Response &response)
+{
+    for(int i=0; i<request.numSteps; i++)
+        graspitCore->getWorld()->stepDynamics();
+
     return true;
 }
 

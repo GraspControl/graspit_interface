@@ -78,6 +78,7 @@ find_package(Qt4 COMPONENTS QtCore  REQUIRED)
    SetBodyPose.srv
    GetDynamics.srv
    SetDynamics.srv
+   StepDynamics.srv
    SetRobotDesiredDOF.srv
    AutoGrasp.srv
    AutoOpen.srv
