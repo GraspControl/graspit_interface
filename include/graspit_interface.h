@@ -23,6 +23,7 @@
 #include <graspit_interface/GetBodies.h>
 #include <graspit_interface/SetDynamics.h>
 #include <graspit_interface/GetDynamics.h>
+#include <graspit_interface/StepDynamics.h>
 #include <graspit_interface/SetGraspableBodyPose.h>
 #include <graspit_interface/SetBodyPose.h>
 #include <graspit_interface/SetRobotPose.h>
@@ -71,6 +72,7 @@ private:
 
   ros::ServiceServer getDynamics_srv;
   ros::ServiceServer setDynamics_srv;
+  ros::ServiceServer stepDynamics_srv;
 
   ros::ServiceServer autoGrasp_srv;
   ros::ServiceServer autoOpen_srv;
@@ -138,6 +140,9 @@ private:
 
   bool setDynamicsCB(graspit_interface::SetDynamics::Request &request,
                      graspit_interface::SetDynamics::Response &response);
+
+  bool stepDynamicsCB(graspit_interface::StepDynamics::Request &request,
+                      graspit_interface::StepDynamics::Response &response);
 
   bool autoGraspCB(graspit_interface::AutoGrasp::Request &request,
                          graspit_interface::AutoGrasp::Response &response);
