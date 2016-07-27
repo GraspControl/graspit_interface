@@ -11,6 +11,7 @@
 #include "graspit_source/include/EGPlanner/egPlanner.h"
 #include "graspit_source/include/EGPlanner/simAnnPlanner.h"
 #include "graspit_source/include/EGPlanner/guidedPlanner.h"
+#include "graspit_source/include/bodySensor.h"
 
 
 namespace GraspitInterface
@@ -106,6 +107,20 @@ bool GraspitInterface::getRobotCB(graspit_interface::GetRobot::Request &request,
         pose.orientation.z = t.rotation().z;
 
         response.robot.pose = pose;
+        std::vector<SensorReading*> sensorReadings;
+        for(int c = 0; c < r->getNumChains(); c++)
+        {
+            for(int l = 0; l < r->getChain(c)->getNumLinks(); l++)
+            {
+                r->getChain(c)->getLink(l)->getSensorReadings(sensorReadings);
+            }
+        }
+
+        for (int i=0; i < sensorReadings.size();i++)
+        {
+            response.robot.tactile.push_back(sensorReadings.at(i)->sensorReading[2]);
+        }
+
 
         for (int i=0; i < r->getNumJoints(); i++) {
             sensor_msgs::JointState robot_joint_state = sensor_msgs::JointState();
