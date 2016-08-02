@@ -13,6 +13,8 @@
 #include "graspit_source/include/EGPlanner/guidedPlanner.h"
 #include "graspit_source/include/bodySensor.h"
 
+#include "graspit_source/include/dynamics/dynamicsEngine.h"
+
 
 namespace GraspitInterface
 {
@@ -59,6 +61,8 @@ int GraspitInterface::init(int argc, char** argv)
     approachToContact_srv = nh->advertiseService("approachToContact", &GraspitInterface::approachToContactCB, this);
     findInitialContact_srv = nh->advertiseService("findInitialContact", &GraspitInterface::findInitialContactCB, this);
     dynamicAutoGraspComplete_srv= nh->advertiseService("dynamicAutoGraspComplete", &GraspitInterface::dynamicAutoGraspCompleteCB, this);
+
+    toggleDynamicsController_srv = nh->advertiseService("toggleDynamicsController", &GraspitInterface::toggleDynamicsControllerCB, this);
 
     plan_grasps_as = new actionlib::SimpleActionServer<graspit_interface::PlanGraspsAction>(*nh, "planGrasps",
                                                                                             boost::bind(&GraspitInterface::PlanGraspsCB, this, _1), false);
@@ -791,20 +795,20 @@ void GraspitInterface::runPlannerInMainThread()
     ROS_INFO("Starting Planner");
     mPlanner->startPlanner();
 
- }
+}
 
- void GraspitInterface::processPlannerResultsInMainThread()
- {
-     Hand *mHand = graspitCore->getWorld()->getCurrentHand();
-     if(mHand == NULL)
-     {
-         ROS_INFO("Planning Hand is NULL");
-     }
-     GraspableBody *mObject = graspitCore->getWorld()->getGB(0);
-     if(mObject == NULL)
-     {
-         ROS_INFO("Planning Object is NULL");
-     }
+void GraspitInterface::processPlannerResultsInMainThread()
+{
+    Hand *mHand = graspitCore->getWorld()->getCurrentHand();
+    if(mHand == NULL)
+    {
+        ROS_INFO("Planning Hand is NULL");
+    }
+    GraspableBody *mObject = graspitCore->getWorld()->getGB(0);
+    if(mObject == NULL)
+    {
+        ROS_INFO("Planning Object is NULL");
+    }
 
     ROS_INFO("Publishing Result");
     for(int i = 0; i < mPlanner->getListSize(); i++)
@@ -857,6 +861,21 @@ void GraspitInterface::runPlannerInMainThread()
     {
         mPlanner->showGrasp(0);
     }
+}
+
+bool toggleDynamicsControllerCB(graspit_interface::ToggleDynamicsController::Request &request,
+                                graspit_interface::ToggleDynamicsController::Response &response)
+
+{
+    if(request.enable) {
+        graspitCore->getWorld()->getDynamicsEngine()->turnOnController();
+        ROS_INFO("Dynamics controller is now enabled!");
+    } else {
+        graspitCore->getWorld()->getDynamicsEngine()->turnOnController();
+        ROS_INFO("Dynamics controller is now disabled. You can now control the DOF forces manually!");
+    }
+    return true;
+
 }
 
 }

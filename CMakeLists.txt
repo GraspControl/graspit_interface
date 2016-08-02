@@ -96,6 +96,7 @@ find_package(Qt4 COMPONENTS QtCore  REQUIRED)
    ApproachToContact.srv
    FindInitialContact.srv
    DynamicAutoGraspComplete.srv
+   ToggleDynamicsController.srv
  )
 
 

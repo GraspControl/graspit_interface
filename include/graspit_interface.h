@@ -44,6 +44,7 @@
 #include <graspit_interface/ApproachToContact.h>
 #include <graspit_interface/FindInitialContact.h>
 #include <graspit_interface/DynamicAutoGraspComplete.h>
+#include <graspit_interface/ToggleDynamicsController.h>
 
 // ActionServer includes
 #include <graspit_interface/PlanGraspsAction.h>
@@ -97,6 +98,8 @@ private:
 
   ros::ServiceServer approachToContact_srv;
   ros::ServiceServer findInitialContact_srv;
+
+  ros::ServiceServer toggleDynamicsController_srv;
 
   ros::ServiceServer dynamicAutoGraspComplete_srv;
 
@@ -198,6 +201,9 @@ private:
 
   bool dynamicAutoGraspCompleteCB(graspit_interface::DynamicAutoGraspComplete::Request &request,
                                   graspit_interface::DynamicAutoGraspComplete::Response &response);
+
+  bool toggleDynamicsControllerCB(graspit_interface::ToggleDynamicsController::Request &request,
+                                  graspit_interface::ToggleDynamicsController::Response &response);
 
   //ActionServer callbacks
   void PlanGraspsCB(const graspit_interface::PlanGraspsGoalConstPtr &goal);
