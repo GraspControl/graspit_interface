@@ -863,7 +863,7 @@ void GraspitInterface::processPlannerResultsInMainThread()
     }
 }
 
-bool toggleDynamicsControllerCB(graspit_interface::ToggleDynamicsController::Request &request,
+bool GraspitInterface::toggleDynamicsControllerCB(graspit_interface::ToggleDynamicsController::Request &request,
                                 graspit_interface::ToggleDynamicsController::Response &response)
 
 {
@@ -871,7 +871,7 @@ bool toggleDynamicsControllerCB(graspit_interface::ToggleDynamicsController::Req
         graspitCore->getWorld()->getDynamicsEngine()->turnOnController();
         ROS_INFO("Dynamics controller is now enabled!");
     } else {
-        graspitCore->getWorld()->getDynamicsEngine()->turnOnController();
+        graspitCore->getWorld()->getDynamicsEngine()->turnOffController();
         ROS_INFO("Dynamics controller is now disabled. You can now control the DOF forces manually!");
     }
     return true;
